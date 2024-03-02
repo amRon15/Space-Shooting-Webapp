@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #a9a9a9;
+        color: white;
+        font-family: "Pixelify Sans";
+      }
+      canvas {
+        display: block;
+        margin: 0 auto;
+      }
+      img {
+        width: 32px;
+        height: 32px;
+        transform: translateY(+10px);
+      }
+      #border {
+        background-color: #545454;
+        width: 70%;
+        border-radius: 15px;
+        margin: 30px auto;
+        padding-bottom: 20px;
+      }
+      #score {
+        font-size: 30px;
+        text-align: center;
+        padding: 10px 0;
+      }
+      #bulletInfo img {
+        width: 16px;
+        height: 32px;
+      }
+      #gameInfo {
+        margin: 0 auto;
+      }
+      .meteor {
+      }
+      .spaceship {
+      }
+      .control {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        margin: 0 auto;
+        display: none;
+      }
+      #gameScreen {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+      #gameControl {
+      }
+      #up {
+        grid-column: 2;
+        grid-row: 1;
+      }
+      #down {
+        grid-column: 2;
+        grid-row: 3;
+      }
+      #right {
+        grid-column: 3;
+        grid-row: 2;
+      }
+      #left {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      #center {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      button {
+        width: 50px;
+        height: 50px;
+        background-color: #272929;
+        color: black;
+        border-radius: 10px;
+        font-size: 20px;
+      }
+      #shoot {
+        margin: 0 auto;
+        display: none;
+      }
+      #pause {
+        display: none;
+        position: absolute;
+        background-color: #4309f318;
+        height: 20%;
+        width: 500px;
+        height: 600px;
+        margin-left: 20px;
+        transform: translateY(-620px);
+        font-size: larger;
+        text-align: center;
+      }
+      #canvasScreen {
+        cursor: default;
+        margin: 0 auto;
+      }
+      #pauseText {
+        margin-top: 50%;
+      }
+      #endScore {
+        font-size: 32px;
+      }
+      #againBtn {
+        color: white;
+        text-align: center;
+        background-color: #67b3b5;
+        border-color: #67b3b5;
+        font-size: 30px;
+      }
+      @keyframes tryAgain {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.2);
+        }
+      }
+      #pauseText > *:not(button) {
+        animation: tryAgain 1s infinite alternate;
+      }
+    </style>
+  </head>
+  <body>
+    <!--Part-1: 1 mark -->
+    <div id="border">
+      <div id="gameControl">
+        <div class="control">
+          <button id="up">▲</button>
+          <button id="down">▼</button>
+          <button id="center"></button>
+          <button id="left">◄</button>
+          <button id="right">►</button>
+        </div>
+        <div id="score"></div>
+        <button id="shoot">O</button>
+      </div>
+      <div id="gameScreen">
+        <div id="gameInfo">
+          <h2>Game Instruction :</h2>
+          <p>
+            Wipe out the
+            <img class="meteor" src="shooter/CroppedMeteor.png" alt="Meteor" />
+            as much as you can
+          </p>
+          <p>Hit = Score + 1</p>
+          <p>
+            <img class="meteor" src="shooter/CroppedMeteor.png" /> leave the
+            screen = Game Over
+          </p>
+          <p>
+            <img class="spaceship" src="shooter/croppedShip.png" /> touches
+            <img class="meteor" src="shooter/CroppedMeteor.png" /> = Game Over
+          </p>
+          <span id="bulletInfo"
+            ><img src="shooter/bulletSymbol.png" /> = Number Of Bullets</span
+          >
+          <h3>Control :</h3>
+          <p>Up : &UpArrow;</p>
+          <p>Down : &DownArrow;</p>
+          <p>Left : &LeftArrow;</p>
+          <p>Right : &RightArrow;</p>
+          <p>Shoot : &blank;</p>
+          <h3>Target Score : 100</h3>
+        </div>
+        <div id="canvasScreen">
+          <canvas
+            id="gameCanvas"
+            width="500"
+            height="600"
+            style="border: 20px solid black; border-radius: 10px"
+          >
+          </canvas>
+          <div id="pause">
+            <div id="pauseText">
+              <span id="endScore">YOUR SCORE : </span>
+              <p>TRY AGAIN</p>
+              <p>PRESS SPACEBAR TO START</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      ////////////////////////////// Game variables. No need to edit.
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      let frame = 0;
+
+      let score = 0;
+      let scoreDiv = document.getElementById("score");
+
+      let stage = 1;
+
+      //Pause
+      let isPause = false;
+      let pauseScreen = document.getElementById("pause");
+      let finalScoreDiv = document.getElementById("endScore");
+
+      //Player
+      const playerWidth = 64;
+      const playerHeight = 64;
+      let playerX = canvas.width / 2 - playerWidth / 2;
+      let playerY = canvas.height - playerHeight;
+      let playerIndexX = 0;
+      let playerIndexY = 1;
+      let playerSpeed = 4;
+      let pressLeft = false;
+      let pressRight = false;
+      let pressUp = false;
+      let pressDown = false;
+      const playerImg = new Image();
+      playerImg.src = "/shooter/spaceship.png";
+
+      //Bullet
+      let bullets = [];
+      let bulletDelay = 0;
+      let isShoot = false;
+      const bulletInterval = 6;
+      const bulletWidth = 15;
+      const bulletHeight = 15;
+      const bulletSpeed = 10;
+      const bulletImg = new Image();
+      bulletImg.src = "/shooter/bullet.png";
+      const bulletSymbolW = 32;
+      const bulletSymbolH = 48;
+      const bulletSymbolImg = new Image();
+      bulletSymbolImg.src = "/shooter/bulletSymbol.png";
+
+      //Enemy
+      let enemyX = Math.floor(Math.random() * (canvas.width - 64 * 2) + 64);
+      let enemyY = 0 - 64;
+      const enemyWidth = 64;
+      const enemyHeight = 64;
+      let enemies = [];
+      let enemyIndex = 0;
+      //   let numOfEnemy = Math.floor(Math.random() * (4 - 1) + 1);
+      const enemyInterval = 60;
+      let enemyDelay = 0;
+      const enemy1Img = new Image();
+      enemy1Img.src = "/shooter/meteor.png";
+
+      //Explode Imgae
+      let explodeIndex = 0;
+      const explodeWidth = 64;
+      const explodeHeight = 64;
+      let explodeX;
+      let explodeY;
+      const explodeImg = new Image();
+      explodeImg.src = "/shooter/Effect.png";
+
+      //background
+      let bgY = 0;
+      const bgImg = new Image();
+      bgImg.src = "/shooter/space.png";
+
+      //////////////////////////////
+
+      // Part-2b: Handle keyboard controls. 6 marks
+      function handleInput() {
+        window.addEventListener("keydown", function (event) {
+          switch (event.keyCode) {
+            case 37:
+              // Left arrow key
+              pressLeft = true;
+              bulletDelay = 0;
+              break;
+            case 39:
+              // Right arrow key
+              pressRight = true;
+              bulletDelay = 0;
+              break;
+            case 38:
+              pressUp = true;
+              bulletDelay = 0;
+              break;
+            case 40:
+              pressDown = true;
+              bulletDelay = 0;
+              break;
+            case 32:
+              isShoot = true;
+              if (isPause) {
+                isPause = false;
+                pauseScreen.style.display = "none";
+                reloadGame();
+              } else {
+                if (isShoot) {
+                  if (bulletDelay % 2 == 0) {
+                    if (
+                      (stage == 1 && bullets.length < 1) ||
+                      (stage == 2 && bullets.length < 2) ||
+                      (stage == 3 && bullets.length < 3)
+                    ) {
+                      bulletDelay = bulletInterval;
+                      bullets.push({ x: playerX, y: playerY });
+                    }
+                  }
+                  bulletDelay--;
+                }
+              }
+              break;
+          }
+        });
+        window.addEventListener("keyup", function (event) {
+          switch (event.keyCode) {
+            case 37:
+              // Left arrow key
+              playerIndexX = 0;
+              playerIndexY = 1;
+              pressLeft = false;
+              break;
+            case 39:
+              // Right arrow key
+              playerIndexX = 0;
+              playerIndexY = 1;
+              pressRight = false;
+              break;
+            case 38:
+              pressUp = false;
+              break;
+            case 40:
+              pressDown = false;
+              break;
+            case 32:
+              bulletDelay = 0;
+          }
+        });
+      }
+
+      // Move Player
+      function move() {
+        if (pressLeft) {
+          playerIndexX = 2;
+          playerIndexY = 0;
+          playerX -= playerSpeed;
+          if (score >= 60) {
+            playerX -= playerSpeed;
+          }
+          if (playerX < 0) playerX = 0;
+        }
+        if (pressRight) {
+          playerIndexX = 0;
+          playerIndexY = 2;
+          playerX += playerSpeed;
+          if (score >= 60) {
+            playerX += playerSpeed;
+          }
+
+          if (playerX + playerWidth > canvas.width)
+            playerX = canvas.width - playerWidth;
+        }
+        if (pressUp) {
+          playerY -= playerSpeed;
+          if (score >= 60) {
+            playerY -= playerSpeed;
+          }
+
+          if (playerY < 0) {
+            playerY = 0;
+          }
+        }
+        if (pressDown) {
+          playerY += playerSpeed;
+          if (score >= 60) {
+            playerY += playerSpeed;
+          }
+
+          if (playerY > canvas.height - playerHeight) {
+            playerY = canvas.height - playerHeight;
+          }
+        }
+      }
+
+      function draw() {
+        //draw Background
+        bgY = bgY < canvas.height ? (bgY += 2) : 0;
+        ctx.drawImage(bgImg, 0, bgY, 500, 600);
+        ctx.drawImage(bgImg, 0, bgY - canvas.height, 500, 600);
+
+        //Draw Player
+        ctx.drawImage(
+          playerImg,
+          playerIndexX * playerWidth,
+          playerIndexY * playerHeight,
+          playerWidth,
+          playerHeight,
+          playerX,
+          playerY,
+          playerWidth,
+          playerHeight
+        );
+
+        //Draw enemy
+        enemies.forEach((enemy) => {
+          ctx.drawImage(
+            enemy1Img,
+            enemyIndex * enemyWidth,
+            0,
+            enemyWidth,
+            enemyHeight,
+            enemy.x,
+            enemy.y,
+            enemyWidth * 2,
+            enemyHeight * 2
+          );
+
+          enemy.y += enemy.speed;
+        });
+
+        //Draw bullets
+        bullets.forEach((bullet) => {
+          ctx.drawImage(bulletImg, bullet.x, bullet.y);
+
+          bullet.y -= bulletSpeed;
+          if (bullet.y < 0 - bulletHeight) {
+            bullets.splice(bullets.indexOf(bullet), 1);
+          }
+        });
+        //Draw bullet Symbol
+        for (let i = 1; i <= stage; i++) {
+          ctx.drawImage(
+            bulletSymbolImg,
+            canvas.width - bulletSymbolW * i,
+            0,
+            bulletSymbolW,
+            bulletSymbolH
+          );
+        }
+
+        //Draw explode effect
+        ctx.drawImage(
+          explodeImg,
+          0,
+          explodeIndex * explodeHeight,
+          explodeWidth,
+          explodeHeight,
+          explodeX,
+          explodeY,
+          explodeWidth,
+          explodeHeight
+        );
+
+        //Handle frame of image
+        if (frame % 8 == 0) {
+          if (explodeIndex <= 2) {
+            explodeIndex++;
+          }
+          if (enemyIndex < 2) {
+            enemyIndex++;
+          } else {
+            enemyIndex = 0;
+          }
+        }
+      }
+
+      //Spawn enemy
+      function randomEnemy() {
+        const enemySpeed = Math.floor(Math.random() * (6 - 3) + 3);
+        const enemyXY = {
+          x: Math.floor(
+            Math.random() * (canvas.width - enemyWidth * 3) + enemyWidth
+          ),
+          y: enemyY,
+          speed: enemySpeed,
+        };
+
+        if (score < 10 && frame % 80 == 0) {
+          enemies.push(enemyXY);
+        } else if (score >= 10 && score < 15 && frame % 75 == 0) {
+          enemies.push(enemyXY);
+        } else if (score >= 15 && score < 20 && frame % 70 == 0) {
+          enemies.push(enemyXY);
+        } else if (score >= 20 && score < 25 && frame % 65 == 0) {
+          enemies.push(enemyXY);
+        } else if (score >= 25 && score < 30 && frame % 60 == 0) {
+          enemies.push(enemyXY);
+        } else if (score >= 30 && score < 40 && frame % 50 == 0) {
+          enemies.push(enemyXY);
+        } else if (score >= 40 && score < 60 && frame % 40 == 0) {
+          enemies.push(enemyXY);
+        } else if (score >= 60 && score < 80 && frame % 30 == 0) {
+          enemies.push(enemyXY);
+        } else if (score >= 80 && frame % 10 == 0) {
+          enemies.push(enemyXY);
+        }
+      }
+
+      // Handle different situation
+      function handleEnemy() {
+        enemies.forEach((enemy) => {
+          // Enemy leave the canvas
+          if (enemy.y > canvas.height) {
+            finalScoreDiv.innerHTML += score;
+            isPause = true;
+          }
+          // Enemy touch the player.
+          if (
+            enemy.x + enemyWidth > playerX &&
+            enemy.x < playerX &&
+            enemy.y + enemyHeight > playerY &&
+            enemy.y < playerY
+          ) {
+            isPause = true;
+            finalScoreDiv.innerHTML += score;
+          }
+          bullets.forEach((bullet) => {
+            // Enemy touches the bullet.
+            if (
+              enemy.x + enemyWidth > bullet.x &&
+              enemy.x < bullet.x &&
+              enemy.y > bullet.y - bulletHeight
+            ) {
+              explodeX = enemy.x + enemyWidth / 2;
+              explodeY = enemy.y + enemyHeight / 2;
+              explodeIndex = 0;
+
+              score++;
+              bullets.splice(bullets.indexOf(bullet), 1);
+              enemies.splice(enemies.indexOf(enemy), 1);
+            }
+          });
+        });
+      }
+
+      //reload Game
+      function reloadGame() {
+        enemyY = 0 - enemyHeight;
+        enemies = [];
+        score = 0;
+        stage = 1;
+        pressLeft = false;
+        pressRight = false;
+        pressUp = false;
+        pressDown = false;
+        finalScoreDiv.innerHTML = "YOUR SCORE : ";
+      }
+
+      //Level up
+      function levelUp() {
+        if (score >= 20 && score < 40) {
+          stage = 2;
+        } else if (score >= 40) {
+          stage = 3;
+        } else if (score >= 60) {
+          playerSpeed = 5;
+        } else if (score >= 100) {
+          reloadGame();
+        }
+      }
+
+      //Pause screen pop out
+      function showPauseScreen() {
+        if (isPause) {
+          pauseScreen.style.display = "block";
+        }
+      }
+
+      // Part-2c: Update game objects by using the “update()” function. 8 marks
+      function update() {
+        //Update Score
+        scoreDiv.innerText = "SCORE : " + score;
+        if (!isPause) {
+          levelUp();
+          move();
+          draw();
+          randomEnemy();
+          handleEnemy();
+          showPauseScreen();
+        }
+        frame = requestAnimationFrame(update);
+      }
+
+      ////////////////////////////// Game operation. No need to edit.
+
+      window.addEventListener("load", () => {
+        handleInput();
+        update();
+      });
+
+      //////////////////////////////
+    </script>
+  </body>
+</html>
