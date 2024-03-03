@@ -252,7 +252,7 @@
 
       //End
       let isEnd = false;
-      let classEnd = document.querySelectorAll(".end");
+      let endGame = document.querySelectorAll(".end");
 
       //Player
       const playerWidth = 64;
@@ -285,8 +285,8 @@
       bulletSymbolImg.src = "/shooter/bulletSymbol.png";
 
       //Enemy
-      let enemyX = Math.floor(Math.random() * (canvas.width - 64 * 2) + 64);
-      let enemyY = 0 - 64;
+      let enemyX;
+      let enemyY = -64;
       const enemyWidth = 64;
       const enemyHeight = 64;
       let enemies = [];
@@ -596,7 +596,7 @@
 
       //reload Game
       function reloadGame() {
-        enemyY = 0 - enemyHeight;
+        enemyY = -enemyHeight;
         enemies = [];
         bullets = [];
         score = 0;
@@ -628,8 +628,7 @@
         if (isGameOver) {
           idEndScore.innerHTML = "YOUR SCORE : " + score;
           pauseScreen.style.display = "block";
-          console.log("isGameOver");
-          classEnd.forEach((e) => {
+          endGame.forEach((e) => {
             e.style.display = isEnd ? "block" : "none";
           });
           classGameOver.forEach((e) => {
