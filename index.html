@@ -34,10 +34,10 @@
 
     #border {
       background-color: #545454;
-      max-width: 100vh;
+      width: 120vh;
       border-radius: 15px;
       margin: 0 auto;
-      padding-bottom: 40px;
+      padding-bottom: 20px;
     }
 
     #score {
@@ -73,14 +73,14 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
-      padding: 0 1em;
+      padding: 0 1vw;
     }
 
     button {
       width: 50px;
       height: 50px;
       background-color: #272929;
-      color: black;
+      color: #545454;
       border-radius: 10px;
       font-size: 20px;
       border: #272929 1px solid;
@@ -210,8 +210,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 6em;
+        gap: 10vi;
         margin-top: 1em;
+      }
+
+      .control button {
+        border: black 3px solid;
+        width: 15vi;
+        height: 15vi;
       }
 
       .arrowKey {
@@ -250,10 +256,8 @@
 
       #shootKey {
         background-color: #9b2256;
-        border-color: #9b2256;
+        border: #f2ce44 3px solid;
         border-radius: 50%;
-        width: 3em;
-        height: 3em;
       }
 
       .option {
@@ -268,7 +272,7 @@
         color: white;
         font-size: 1em;
         font-family: "Pixelify Sans";
-        width: 15vh;
+        width: 30vi;
         height: 2em;
       }
 
@@ -312,7 +316,7 @@
         <h2>Game Instruction :</h2>
         <p>
           Wipe out the
-          <img class="meteor" src="/blob/main/shooter/CroppedMeteor.png" alt="Meteor" />
+          <img class="meteor" src="/shooter/CroppedMeteor.png" alt="Meteor" />
           as much as you can
         </p>
         <p>Hit = Score + 1</p>
@@ -341,33 +345,33 @@
           <div id="pauseText">
             <span id="endScore">YOUR SCORE : </span>
             <p class="gameOver">TRY AGAIN</p>
-            <p class="gameOver">PRESS SPACEBAR TO START</p>
+            <p class="gameOver" id="startInfo">PRESS SPACEBAR TO START</p>
             <p class="esc">PAUSE</p>
-            <p class="esc">PRESS SPACEBAR TO CONTINUE</p>
+            <p class="esc" id="continueInfo">PRESS SPACEBAR TO CONTINUE</p>
             <p class="end">CONGRATUATION! ! !</p>
             <p class="end">THANK YOU FOR PLAYING! ! !</p>
-            <p class="end">PRESS R TO RESTART</p>
+            <p class="end" id="restartInfo">PRESS R TO RESTART</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="controlWrapper">
-    <div class="control">
-      <div class="arrowKey">
-        <button id="up" onpointerdown="up()" onpointerup="stopUp()">▲</button>
-        <button id="down" onpointerdown="down()" onpointerup="stopDown()">▼</button>
-        <button id="center"></button>
-        <button id="left" onpointerdown="left()" onpointerup="stopLeft()">◄</button>
-        <button id="right" onpointerdown="right()" onpointerup="stopRight()">►</button>
-      </div>
-      <button id="shootKey" onpointerdown="shoot()" onpointerup=" bulletDelay=0 "></button>
+
+  <div class="control">
+    <div class="arrowKey">
+      <button id="up" onpointerdown="up()" onpointerup="stopUp()">▲</button>
+      <button id="down" onpointerdown="down()" onpointerup="stopDown()">▼</button>
+      <button id="center"></button>
+      <button id="left" onpointerdown="left()" onpointerup="stopLeft()">◄</button>
+      <button id="right" onpointerdown="right()" onpointerup="stopRight()">►</button>
     </div>
-    <div class="option">
-      <button id="esc" onclick="pauseGame()">ESC</button>
-      <button id="restart" onclick="restart()">RESTART</button>
-    </div>
+    <button id="shootKey" onpointerdown="shoot()" onpointerup=" bulletDelay=0 "></button>
   </div>
+  <div class="option">
+    <button id="esc" onclick="pauseGame()">PAUSE</button>
+    <button id="restart" onclick="restart()">RESTART</button>
+  </div>
+
   <script>
     ////////////////////////////// Game variables. No need to edit.
     const canvas = document.getElementById("gameCanvas");
@@ -450,6 +454,22 @@
     let bgY = 0;
     const bgImg = new Image();
     bgImg.src = "/shooter/space.png";
+
+    //Pause screen instruction
+    let idStartInfo = document.getElementById("startInfo")
+    let restartInfo = document.getElementById("restartInfo")
+    let continueInfo = document.getElementById("continueInfo")
+
+    //Read screen size
+    const screenWidth = document.documentElement.clientWidth
+    const screenHeight = document.documentElement.clientHeight
+
+    //Reset text
+    if (screenWidth < 768) {
+      idStartInfo.innerHTML = "PRESS O TO START"
+      restartInfo.innerHTML = "PRESS RESTART TO START"
+      continueInfo.innerHTML = "PRESS O TO CONTINUE"
+    }
 
     //////////////////////////////
 
