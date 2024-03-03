@@ -122,6 +122,26 @@
         border-color: #67b3b5;
         font-size: 30px;
       }
+      @keyframes shine {
+        from {
+          color: white;
+        }
+        25% {
+          color: rgb(255, 255, 164);
+        }
+        50% {
+          color: rgb(251, 251, 97);
+        }
+        75% {
+          color: rgb(255, 255, 57);
+        }
+        to {
+          color: rgb(255, 255, 0);
+        }
+      }
+      .shine {
+        animation: shine 1s infinite alternate;
+      }
       @keyframes tryAgain {
         from {
           transform: scale(1);
@@ -130,8 +150,11 @@
           transform: scale(1.2);
         }
       }
-      #pauseText > *:not(button) {
-        animation: tryAgain 1s infinite alternate;
+      #pauseText > *:not(span) {
+        animation: tryAgain 1s infinite alternate, shine 1s infinite alternate;
+      }
+      .end {
+        display: none;
       }
     </style>
   </head>
@@ -175,7 +198,8 @@
           <p>Left : &LeftArrow;</p>
           <p>Right : &RightArrow;</p>
           <p>Shoot : &blank;</p>
-          <h3>Target Score : 100</h3>
+          <p>Restart : R</p>
+          <h3 class="shine">Target Score : 100! ! !</h3>
         </div>
         <div id="canvasScreen">
           <canvas
@@ -188,8 +212,11 @@
           <div id="pause">
             <div id="pauseText">
               <span id="endScore">YOUR SCORE : </span>
-              <p>TRY AGAIN</p>
-              <p>PRESS SPACEBAR TO START</p>
+              <p class="gameOver">TRY AGAIN</p>
+              <p class="gameOver">PRESS SPACEBAR TO START</p>
+              <p class="end">CONGRATUATION! ! !</p>
+              <p class="end">THANK YOU FOR PLAYING! ! !</p>
+              <p class="end">PRESS R TO RESTART</p>
             </div>
           </div>
         </div>
@@ -202,15 +229,23 @@
 
       let frame = 0;
 
-      let score = 0;
+      //Score
+      let score = 95;
       let scoreDiv = document.getElementById("score");
+      let finalScoreDiv = document.getElementById("endScore");
 
       let stage = 1;
+
+      //Game Over
+      let gameOver = document.querySelectorAll(".gameOver");
 
       //Pause
       let isPause = false;
       let pauseScreen = document.getElementById("pause");
-      let finalScoreDiv = document.getElementById("endScore");
+
+      //End
+      let isEnd = false;
+      let endGame = document.querySelectorAll(".end");
 
       //Player
       const playerWidth = 64;
@@ -296,9 +331,11 @@
             case 32:
               isShoot = true;
               if (isPause) {
-                isPause = false;
-                pauseScreen.style.display = "none";
-                reloadGame();
+                if (!isEnd) {
+                  isPause = false;
+                  pauseScreen.style.display = "none";
+                  reloadGame();
+                }
               } else {
                 if (isShoot) {
                   if (bulletDelay % 2 == 0) {
@@ -315,6 +352,11 @@
                 }
               }
               break;
+            case 82:
+              isPause = false;
+              isEnd = false;
+              pauseScreen.style.display = "none";
+              reloadGame();
           }
         });
         window.addEventListener("keyup", function (event) {
@@ -474,7 +516,7 @@
         const enemySpeed = Math.floor(Math.random() * (6 - 3) + 3);
         const enemyXY = {
           x: Math.floor(
-            Math.random() * (canvas.width - enemyWidth * 3) + enemyWidth
+            Math.random() * (canvas.width - enemyWidth * 2 - 20) + enemyWidth
           ),
           y: enemyY,
           speed: enemySpeed,
@@ -542,6 +584,7 @@
       function reloadGame() {
         enemyY = 0 - enemyHeight;
         enemies = [];
+        bullets = [];
         score = 0;
         stage = 1;
         pressLeft = false;
@@ -559,8 +602,10 @@
           stage = 3;
         } else if (score >= 60) {
           playerSpeed = 5;
-        } else if (score >= 100) {
-          reloadGame();
+        }
+        if (score >= 100) {
+          isPause = true;
+          isEnd = true;
         }
       }
 
@@ -568,6 +613,15 @@
       function showPauseScreen() {
         if (isPause) {
           pauseScreen.style.display = "block";
+          endGame.forEach((e) => {
+            e.style.display = isEnd ? "block" : "none";
+          });
+          gameOver.forEach((e) => {
+            e.style.display = isEnd ? "none" : "block";
+          });
+          if (isEnd) {
+            finalScoreDiv.innerHTML += score;
+          }
         }
       }
 
