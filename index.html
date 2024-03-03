@@ -66,15 +66,6 @@
 
     }
 
-    .eyey {
-      display: none;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: 1fr;
-      margin: 0.8em 0;
-      display: none;
-      gap: 0.1em;
-    }
-
     #gameScreen {
       display: flex;
       justify-content: space-around;
@@ -186,6 +177,7 @@
     @media screen and (max-width :767px) {
       body {
         overflow: hidden;
+        transform: translateY(-5px);
       }
 
       #border {
@@ -216,7 +208,7 @@
         display: grid;
         justify-content: center;
         align-items: center;
-        gap: 5vi;
+        gap: 10vi;
         padding-top: 1em;
       }
 
@@ -736,7 +728,7 @@
 
     //Spawn enemy
     function randomEnemy() {
-      const enemySpeed = isMobile ? Math.floor(Math.random() * (4 - 2) + 2) : Math.floor(Math.random() * (6 - 3) + 3);
+      const enemySpeed = isMobile ? Math.floor(Math.random() * (4 - 3) + 2) : Math.floor(Math.random() * (6 - 3) + 3);
       const enemyXY = {
         x: Math.floor(Math.random() * (canvas.width - enemyWidth - 20)),
         y: enemyY,
