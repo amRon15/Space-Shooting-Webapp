@@ -311,19 +311,19 @@
         <h2>Game Instruction :</h2>
         <p>
           Wipe out the
-          <img class="meteor" src="shooter/CroppedMeteor.png" alt="Meteor" />
+          <img class="meteor" src="/blob/main/shooter/CroppedMeteor.png" alt="Meteor" />
           as much as you can
         </p>
         <p>Hit = Score + 1</p>
         <p>
-          <img class="meteor" src="shooter/CroppedMeteor.png" /> leave the
+          <img class="meteor" src="/shooter/CroppedMeteor.png" /> leave the
           screen = Game Over
         </p>
         <p>
-          <img class="spaceship" src="shooter/croppedShip.png" /> touches
-          <img class="meteor" src="shooter/CroppedMeteor.png" /> = Game Over
+          <img class="spaceship" src="/shooter/croppedShip.png" /> touches
+          <img class="meteor" src="/shooter/CroppedMeteor.png" /> = Game Over
         </p>
-        <span id="bulletInfo"><img src="shooter/bulletSymbol.png" /> = Number Of Bullets</span>
+        <span id="bulletInfo"><img src="/shooter/bulletSymbol.png" /> = Number Of Bullets</span>
         <h3>Control :</h3>
         <p>Up : &UpArrow;</p>
         <p>Down : &DownArrow;</p>
@@ -408,7 +408,7 @@
     let pressUp = false;
     let pressDown = false;
     const playerImg = new Image();
-    playerImg.src = "shooter/spaceship.png";
+    playerImg.src = "/shooter/spaceship.png";
 
     //Bullet
     let bullets = [];
@@ -419,11 +419,11 @@
     const bulletHeight = 15;
     const bulletSpeed = 10;
     const bulletImg = new Image();
-    bulletImg.src = "shooter/bullet.png";
+    bulletImg.src = "/shooter/bullet.png";
     const bulletSymbolWidth = 32;
     const bulletSymbolHeight = 48;
     const bulletSymbolImg = new Image();
-    bulletSymbolImg.src = "shooter/bulletSymbol.png";
+    bulletSymbolImg.src = "/shooter/bulletSymbol.png";
 
     //Enemy
     let enemyX;
@@ -434,7 +434,7 @@
     let enemyIndex = 0;
     const enemyInterval = 60;
     const enemy1Img = new Image();
-    enemy1Img.src = "shooter/meteor.png";
+    enemy1Img.src = "/shooter/meteor.png";
 
     //Explode Imgae
     let explodeIndex = 0;
@@ -443,12 +443,12 @@
     let explodeX;
     let explodeY;
     const explodeImg = new Image();
-    explodeImg.src = "shooter/Effect.png";
+    explodeImg.src = "/shooter/Effect.png";
 
     //background
     let bgY = 0;
     const bgImg = new Image();
-    bgImg.src = "shooter/space.png";
+    bgImg.src = "/shooter/space.png";
 
     //////////////////////////////
 
