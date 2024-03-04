@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     * {
       -webkit-user-select: none;
@@ -46,10 +47,40 @@
       padding-bottom: 20px;
     }
 
+    .topBar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 1;
+      padding-top: 10px;
+    }
+
+    .topBarOption {
+      display: none;
+      align-self: center;
+      text-align: right;
+      margin-right: 3vi;
+    }
+
+    .topBarOption button,
+    .volume {
+      background-color: transparent;
+      border-radius: 50%;
+      border: white 3px solid;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    #infoBtn {
+      display: none;
+    }
+
     #score {
       font-size: 30px;
       text-align: center;
       padding: 10px 0;
+      grid-column: 2;
     }
 
     #bulletInfo img {
@@ -99,6 +130,10 @@
       font-size: 1.2em;
       text-align: center;
       overflow: hidden;
+    }
+
+    .info {
+      display: none;
     }
 
     #canvasScreen {
@@ -158,7 +193,7 @@
       }
     }
 
-    #pauseText>*:not(span) {
+    #pauseText>*:not(span, .info) {
       animation: tryAgain 1s infinite alternate, shine 1s infinite alternate;
     }
 
@@ -171,6 +206,10 @@
     }
 
     .option {
+      display: none;
+    }
+
+    .info {
       display: none;
     }
 
@@ -197,6 +236,26 @@
         font-size: 1.2em;
       }
 
+      .topBar {
+        padding: 5px;
+      }
+
+      .topBarOption {
+        text-align: center;
+        display: inline;
+      }
+
+      .topBarOption button {
+        font-size: 5vi;
+        width: 10vi;
+        height: 10vi;
+      }
+
+
+      #infoBtn {
+        display: inline
+      }
+
       #pause {
         width: 300px;
         height: 400px;
@@ -204,18 +263,58 @@
         font-size: 1em;
       }
 
+      .info {
+        display: none;
+        font-size: 0.8em;
+        transform: translateY(-110px);
+        margin: 0;
+        line-height: 2em;
+      }
+
+      .infoScreen {
+        background-color: #00000060;
+      }
+
+      p.shine.info {
+        padding: 15px 0;
+      }
+
+      @keyframes bounce {
+
+        25% {
+
+          transform: translateY(-120px);
+        }
+
+        50% {
+          transform: translateY(-110px);
+        }
+
+        75% {
+          transform: translateY(-112px);
+        }
+
+        to {
+          transform: translateY(-110px);
+        }
+      }
+
+      #infoHint {
+        animation: bounce 2s infinite ease-in-out;
+      }
+
       .control {
         display: grid;
         justify-content: center;
         align-items: center;
-        gap: 10vi;
-        padding-top: 1em;
+        gap: 5vi;
+        padding-top: 5px;
       }
 
       .control button {
         border: black 3px solid;
-        width: 15vi;
-        height: 15vi;
+        width: 20vi;
+        height: 20vi;
       }
 
       #up {
@@ -293,8 +392,14 @@
 <body>
   <!--Part-1: 1 mark -->
   <div id="border">
-    <div id="score"></div>
-    <button id="shoot">O</button>
+    <span class="topBar">
+      <div id="score"></div>
+      <span class="topBarOption">
+        <button id="infoBtn" onclick="showInfo()"><i class="fa fa-question"></i></button>
+        <button class="volume" onclick="setVolume()"><i class="fa fa-volume-up "></i></button>
+      </span>
+    </span>
+    <!-- <button id="shoot">O</button> -->
     <div id="gameScreen">
       <div id="gameInfo">
         <h2>Game Instruction :</h2>
@@ -303,7 +408,7 @@
           <img class="meteor" src="/shooter/CroppedMeteor.png" alt="Meteor" />
           as much as you can
         </p>
-        <p>Hit = Score + 1</p>
+        <p>Hit <img class="meteor" src="/shooter/CroppedMeteor.png" alt="Meteor" /> = Score + 1</p>
         <p>
           <img class="meteor" src="/shooter/CroppedMeteor.png" /> leave the
           screen = Game Over
@@ -320,7 +425,10 @@
         <p>Right : &RightArrow;</p>
         <p>Shoot : &blank;</p>
         <p>Restart : R</p>
+        <p>PAUSE : ESC</p>
         <h3 class="shine">Target Score : 100</h3>
+        <button class="volume" onclick="setVolume()"><i class="fa fa-volume-up"></i></button>
+
       </div>
       <div id="canvasScreen">
         <canvas id="gameCanvas" width="500" height="600" style="border: 20px solid black; border-radius: 10px">
@@ -335,6 +443,22 @@
             <p class="end">CONGRATUATION! ! !</p>
             <p class="end">THANK YOU FOR PLAYING! ! !</p>
             <p class="end" id="restartInfo">PRESS R TO RESTART</p>
+            <p class="info">Game Instuction : </p>
+            <p class="info">
+              Wipe out the
+              <img class="meteor" src="/shooter/CroppedMeteor.png" alt="Meteor" />
+              as much as you can
+            </p>
+            <p class="info">Hit <img class="meteor" src="/shooter/CroppedMeteor.png" alt="Meteor" /> = Score + 1</p>
+            <p class="info"><img class="meteor" src="/shooter/CroppedMeteor.png" /> leave the
+              screen = Game Over</p>
+            <p class="info">
+              <img class="spaceship" src="/shooter/croppedShip.png" /> touches
+              <img class="meteor" src="/shooter/CroppedMeteor.png" /> = Game Over
+            </p>
+            <span class="info" id="bulletInfo"><img src="/shooter/bulletSymbol.png" /> = Number Of Bullets</span>
+            <p class="shine info">Target Score : 100</p>
+            <p class="info" id="infoHint">PRESS &bigcirc; TO CONTINUE</p>
           </div>
         </div>
       </div>
@@ -368,11 +492,17 @@
     //Game Over
     let classGameOver = document.querySelectorAll(".gameOver");
 
-    //Pause
+    //Option
     let isGameOver = false;
     let pauseScreen = document.getElementById("pause");
     let isGamePause = false;
     let classEsc = document.querySelectorAll(".esc");
+    let isGameMute = false
+    let volumeBtn = document.querySelectorAll(".volume")
+
+
+    let isShowInfo = false
+    let classInfo = document.querySelectorAll(".info")
 
 
     //End
@@ -553,12 +683,13 @@
     function shoot() {
       isShoot = true;
       if (isGameOver) {
-        if (!isEnd && !isGamePause) {
+        if (!isEnd && !isGamePause && !isShowInfo) {
           isGameOver = false;
           pauseScreen.style.display = "none";
           reloadGame();
-        } else if (isGamePause) {
+        } else if (isGamePause || isShowInfo) {
           isGameOver = false;
+          isShowInfo = false
           isGamePause = false;
           pauseScreen.style.display = "none";
         }
@@ -583,6 +714,7 @@
       isGameOver = false;
       isEnd = false;
       isGamePause = false
+      isShowInfo = false
       pauseScreen.style.display = "none";
       reloadGame();
     }
@@ -595,6 +727,7 @@
       } else {
         isGameOver = true;
         isGamePause = true;
+        isShowInfo = false
         showPauseScreen();
       }
     }
@@ -750,12 +883,14 @@
       }
     }
 
-    // Handle different situation
+    // Handle different enemy situation
     function handleEnemy() {
       enemies.forEach((enemy) => {
         // Enemy leave the canvas
         if (enemy.y > canvas.height) {
           isGameOver = true;
+          showPauseScreen();
+
         }
         // Enemy touch the player.
         if (
@@ -765,6 +900,8 @@
           enemy.y < playerY
         ) {
           isGameOver = true;
+          showPauseScreen();
+
         }
         bullets.forEach((bullet) => {
           // Enemy touches the bullet.
@@ -811,24 +948,65 @@
       if (score >= 100) {
         isGameOver = true;
         isEnd = true;
+        showPauseScreen();
       }
     }
 
     //Pause screen pop out
     function showPauseScreen() {
       if (isGameOver) {
-        idEndScore.innerHTML = "YOUR SCORE : " + score;
+        if (!isShowInfo) {
+          idEndScore.innerHTML = "YOUR SCORE : " + score;
+          pauseScreen.style.backgroundColor = "#4309f318"
+        } else {
+          idEndScore.style.display = "none"
+          pauseScreen.style.backgroundColor = "#00000060"
+        }
         pauseScreen.style.display = "block";
         endGame.forEach((e) => {
           e.style.display = isEnd ? "block" : "none";
+
         });
         classGameOver.forEach((e) => {
-          e.style.display = isEnd || isGamePause ? "none" : "block";
+          e.style.display = isEnd || isGamePause || isShowInfo ? "none" : "block";
         });
         classEsc.forEach((e) => {
           e.style.display = isGamePause ? "block" : "none";
         });
+        classInfo.forEach((e) => {
+          e.style.display = isShowInfo ? "block" : "none";
+        })
+        classInfo.forEach((e) => {
+          e.style.display = isShowInfo ? "block" : "none";
+        })
       }
+    }
+
+    //Mute/unmute volume
+    function setVolume() {
+      isGameMute = isGameMute ? false : true
+
+      volumeBtn.forEach((e) => {
+        e.firstElementChild.className = isGameMute ? "fa fa-volume-off" : "fa fa-volume-up"
+        e.lastElementChild.className = isGameMute ? "fa fa-volume-off" : "fa fa-volume-up"
+      })
+    }
+
+    //Show info
+    function showInfo() {
+      if (isShowInfo) {
+        isGameOver = false;
+        isShowInfo = false
+        isGamePause = false
+        idEndScore.style.display = "inline"
+        pauseScreen.style.display = "none";
+      } else {
+        isGameOver = true;
+        isShowInfo = true
+        isGamePause = false
+        showPauseScreen()
+      }
+
     }
 
     // Part-2c: Update game objects by using the “update()” function. 8 marks
@@ -841,7 +1019,7 @@
         draw();
         randomEnemy();
         handleEnemy();
-        showPauseScreen();
+        showPauseScreen()
       }
       frame = requestAnimationFrame(update);
     }
