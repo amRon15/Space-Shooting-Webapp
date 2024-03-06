@@ -49,32 +49,30 @@
         width: 120vh;
         border-radius: 15px;
         margin: 0 auto;
-        padding-bottom: 20px;
       }
 
       .topBar {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: 1;
+        display: inline;
+        justify-content: space-around;
+        align-items: center;
         padding-top: 10px;
       }
 
-      .topBarOption {
-        display: none;
-        align-self: center;
-        text-align: right;
-        margin-right: 3vi;
-      }
-
-      .topBarOption button,
+      .topBar button,
       .volume {
         background-color: transparent;
         border-radius: 50%;
         border: white 3px solid;
         color: white;
-        font-size: 30px;
+        font-size: 25px;
         cursor: pointer;
         text-align: center;
+        width: 40px;
+        height: 40px;
+      }
+
+      #topBarVolume {
+        display: none;
       }
 
       #infoBtn {
@@ -82,9 +80,9 @@
       }
 
       #score {
-        font-size: 30px;
+        font-size: 25px;
         text-align: center;
-        padding: 10px 0;
+        padding: 0;
         grid-column: 2;
       }
 
@@ -105,7 +103,7 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        padding: 0 1vw;
+        padding: 1vw 1vw 2vh;
       }
 
       button {
@@ -217,6 +215,12 @@
         display: none;
       }
 
+      .bottomBar {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+      }
+
       @media screen and (max-width: 767px) {
         body {
           overflow: hidden;
@@ -229,7 +233,7 @@
 
         canvas {
           width: 300px;
-          height: 400px;
+          height: 350px;
         }
 
         #gameInfo {
@@ -241,7 +245,8 @@
         }
 
         .topBar {
-          padding: 5px;
+          display: flex;
+          padding: 10px 0;
         }
 
         .topBarOption {
@@ -255,14 +260,18 @@
           height: 10vi;
         }
 
+        #topBarVolume {
+          display: inline;
+        }
+
         #infoBtn {
           display: inline;
         }
 
         #pause {
           width: 300px;
-          height: 400px;
-          transform: translateY(-420px);
+          height: 350px;
+          transform: translateY(-370px);
           font-size: 1em;
         }
 
@@ -314,8 +323,8 @@
 
         .control button {
           border: black 3px solid;
-          width: 20vi;
-          height: 20vi;
+          width: 15vi;
+          height: 15vi;
         }
 
         #up {
@@ -393,12 +402,12 @@
     <div id="border">
       <span class="topBar">
         <div id="score"></div>
-        <span class="topBarOption">
+        <span>
           <button id="infoBtn" onclick="showInfo()">
             <i class="fa fa-question"></i>
           </button>
-          <button class="volume" onclick="setVolume()">
-            <i class="fa fa-volume-up"></i>
+          <button class="volume" id="topBarVolume" onclick="setVolume()">
+            <i class="fa fa-volume-off"></i>
           </button>
         </span>
       </span>
@@ -435,10 +444,12 @@
           <p>Shoot : &blank;</p>
           <p>Restart : R</p>
           <p>PAUSE : ESC</p>
-          <h3 class="shine">Target Score : 100</h3>
-          <button class="volume" onclick="setVolume()">
-            <i class="fa fa-volume-up"></i>
-          </button>
+          <div class="bottomBar">
+            <h3 class="shine">Target Score : 100</h3>
+            <button class="volume" onclick="setVolume()">
+              <i class="fa fa-volume-off"></i>
+            </button>
+          </div>
         </div>
         <div id="canvasScreen">
           <canvas
@@ -499,7 +510,12 @@
     </div>
 
     <div class="control">
-      <button id="left" onpointerdown="left()" onpointerup="stopLeft()">
+      <button
+        id="left"
+        onpointerdown="left()"
+        onpointerup="stopLeft()"
+        onpointerleave="stopLeft()"
+      >
         ◄
       </button>
       <button
@@ -507,7 +523,12 @@
         onpointerdown="shoot()"
         onpointerup=" bulletDelay=0 "
       ></button>
-      <button id="right" onpointerdown="right()" onpointerup="stopRight()">
+      <button
+        id="right"
+        onpointerdown="right()"
+        onpointerup="stopRight()"
+        onpointerleave="stopLeft()"
+      >
         ►
       </button>
     </div>
@@ -538,7 +559,7 @@
       let pauseScreen = document.getElementById("pause");
       let isGamePause = false;
       let classEsc = document.querySelectorAll(".esc");
-      let isGameMute = false;
+      let isGameMute = true;
       let volumeBtn = document.querySelectorAll(".volume");
 
       //Game Instruction
@@ -546,9 +567,12 @@
       let classInfo = document.querySelectorAll(".info");
 
       //Game Audio
-      const backgroundMusic = new Audio();
-      // backgroundMusic.src = ""
-      // backgroundMusic.play()
+      const backgroundMusic = new Audio("BGM.mp3");
+      backgroundMusic.addEventListener("ended", () => {
+        backgroundMusic.currentTime = 0;
+        backgroundMusic.play();
+      });
+
       const shootSfx = new Audio();
       // shootSfx.src = ""
       const explodeSfx = new Audio();
@@ -1042,8 +1066,14 @@
 
       //Mute/unmute volume
       function setVolume() {
-        isGameMute = isGameMute ? false : true;
-
+        if (isGameMute) {
+          isGameMute = false;
+          backgroundMusic.muted = false;
+          backgroundMusic.play();
+        } else {
+          isGameMute = true;
+          backgroundMusic.muted = true;
+        }
         volumeBtn.forEach((e) => {
           e.firstElementChild.className = isGameMute
             ? "fa fa-volume-off"
