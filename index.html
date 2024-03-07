@@ -242,6 +242,12 @@
         padding: 10px 0;
       }
 
+      .topBarBtn {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
       .topBar button {
         width: 40px;
         height: 40px;
@@ -393,14 +399,14 @@
   <div id="border">
     <span class="topBar">
       <div id="score"></div>
-      <span>
+      <div class="topBarBtn">
         <button id="infoBtn" onclick="showInfo()">
           <i class="fa fa-question"></i>
         </button>
         <button class="volume" id="topBarVolume" onclick="setVolume()">
           <i class="fa fa-volume-off"></i>
         </button>
-      </span>
+      </div>
     </span>
     <!-- <button id="shoot">O</button> -->
     <div id="gameScreen">
