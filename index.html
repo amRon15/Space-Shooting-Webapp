@@ -51,6 +51,7 @@
       justify-content: space-around;
       align-items: center;
       padding-top: 10px;
+      height: auto;
     }
 
     #topBarVolume {
@@ -532,10 +533,7 @@
 
     //Game Audio
     const backgroundMusic = new Audio("BGM.mp3");
-    backgroundMusic.addEventListener("ended", () => {
-      backgroundMusic.currentTime = 0;
-      backgroundMusic.play();
-    });
+    backgroundMusic.loop = true
 
     const shootSfx = new Audio();
     // shootSfx.src = ""
