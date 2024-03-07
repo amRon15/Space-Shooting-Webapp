@@ -62,6 +62,10 @@
       display: none;
     }
 
+    #count {
+      font-size: 18px;
+    }
+
     #score {
       font-size: 25px;
       text-align: center;
@@ -85,7 +89,7 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
-      padding: 1vh 1vw 2vh 1vw;
+      padding: 0 1vw 2vh 1vw;
     }
 
     button {
@@ -240,6 +244,7 @@
 
       .topBar {
         display: flex;
+        padding-bottom: 10px;
       }
 
       .topBarBtn {
@@ -361,8 +366,8 @@
 
         .topBar button {
           font-size: 25px;
-          width: 40px;
-          height: 40px;
+          width: 12vi;
+          height: 12vi;
         }
 
         #pause {
@@ -390,6 +395,7 @@
   <!--Part-1: 1 mark -->
   <div id="border">
     <span class="topBar">
+      <div id="count">Try</div>
       <div id="score"></div>
       <div class="topBarBtn">
         <button id="infoBtn" onclick="showInfo()">
@@ -505,6 +511,16 @@
     let score = 0;
     let idScore = document.getElementById("score");
     let idEndScore = document.getElementById("endScore");
+    let tryCount = 0
+    let idCount = document.getElementById("count")
+    idCount.innerHTML = 'Try : ' + localStorage.getItem("count")
+    let storageCount = parseInt(localStorage.getItem("count"))
+
+    function saveCount() {
+      tryCount++
+      localStorage.setItem("count", tryCount + storageCount)
+      idCount.innerHTML = 'Try : ' + localStorage.getItem("count")
+    }
 
     let stage = 1;
 
@@ -527,18 +543,20 @@
     const backgroundMusic = new Audio("BGM.mp3");
     backgroundMusic.loop = true
 
-    const shootSfx = new Audio();
+    // const shootSfx = new Audio();
     // shootSfx.src = ""
-    const explodeSfx = new Audio();
+    // const explodeSfx = new Audio();
     // explodeSfx.src = ""
-    const levelUpSfx = new Audio();
+    // const levelUpSfx = new Audio();
     // levelUpSfx.src = ""
-    const finalStageSfx = new Audio();
+    // const finalStageSfx = new Audio();
     // finalStageSfx.src = ""
-    const endSfx = new Audio();
+    // const endSfx = new Audio();
     // endSfx.src = ""
-    const gameOverSfx = new Audio();
+    // const gameOverSfx = new Audio();
     // gameOverSfx.src = ""
+
+
 
     //End
     let isEnd = false;
@@ -751,6 +769,7 @@
       isGamePause = false;
       isShowInfo = false;
       pauseScreen.style.display = "none";
+      saveCount()
       reloadGame();
     }
 
@@ -928,6 +947,7 @@
         if (enemy.y > canvas.height) {
           isGameOver = true;
           showPauseScreen();
+          saveCount()
         }
         // Enemy touch the player.
         if (
@@ -938,6 +958,7 @@
         ) {
           isGameOver = true;
           showPauseScreen();
+          saveCount()
         }
         bullets.forEach((bullet) => {
           // Enemy touches the bullet.
@@ -985,6 +1006,7 @@
         isGameOver = true;
         isEnd = true;
         showPauseScreen();
+
       }
     }
 
