@@ -513,13 +513,13 @@
     let idEndScore = document.getElementById("endScore");
     let tryCount = 0
     let idCount = document.getElementById("count")
-    idCount.innerHTML = 'Try : ' + localStorage.getItem("count")
-    let storageCount = parseInt(localStorage.getItem("count"))
+    idCount.innerHTML = 'Try : ' + window.localStorage.getItem("count")
+    let storageCount = parseInt(window.localStorage.getItem("count"))
 
     function saveCount() {
       tryCount++
-      localStorage.setItem("count", tryCount + storageCount)
-      idCount.innerHTML = 'Try : ' + localStorage.getItem("count")
+      window.localStorage.setItem("count", tryCount + storageCount)
+      idCount.innerHTML = 'Try : ' + window.localStorage.getItem("count")
     }
 
     let stage = 1;
