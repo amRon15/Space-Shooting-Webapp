@@ -244,13 +244,9 @@
 
       .topBarBtn {
         display: flex;
-        justify-content: space-around;
+        justify-content: space;
         align-items: center;
-      }
-
-      .topBar button {
-        width: 40px;
-        height: 40px;
+        gap: 5px;
       }
 
       #topBarVolume {
@@ -260,6 +256,7 @@
       #infoBtn {
         display: inline;
       }
+
 
       #pause {
         width: 300px;
@@ -361,6 +358,11 @@
           font-size: 1.2em;
         }
 
+        .topBar button {
+          width: 40px;
+          height: 40px;
+        }
+
         #pause {
           width: 250px;
           height: 300px;
@@ -384,11 +386,7 @@
           margin-top: 0;
         }
 
-        .topBar button {
-          width: 30px;
-          height: 30px;
-          font-size: 15px;
-        }
+
       }
     }
   </style>
