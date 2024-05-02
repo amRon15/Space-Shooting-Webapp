@@ -2,7 +2,7 @@
 
 ## About the project:
 
-This is a school assignment of space shooting game where you control a spaceship and shoot down meteor.
+This is a space shooting game where you control a spaceship and shoot down meteor.
 
 ## Features:
 
