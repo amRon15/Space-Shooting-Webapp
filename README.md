@@ -28,8 +28,7 @@ This is a space shooting game where you control a spaceship and shoot down meteo
 - Optimization
 
 ## ScreenShot
-![Uploading 螢幕截圖 2024-05-03 12.34.05.png…]()
-
+<img width="1440" alt="Space Shooter" src="https://github.com/amRon15/Space-Shooting-Webapp/assets/109853249/a4e865fc-653b-4cf8-af7a-ff9c23d8aa60">
   
 ## Contributing:
 
