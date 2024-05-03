@@ -26,6 +26,10 @@ This is a space shooting game where you control a spaceship and shoot down meteo
 - Mobile version controls ( joystick-like )
 - background music and sound effects (with mute functionality)
 - Optimization
+
+## ScreenShot
+![Uploading 螢幕截圖 2024-05-03 12.34.05.png…]()
+
   
 ## Contributing:
 
