@@ -28,7 +28,8 @@ This is a space shooting game where you control a spaceship and shoot down meteo
 - Optimization
 
 ## ScreenShot
-<img width="1440" alt="Space Shooter" src="https://github.com/amRon15/Space-Shooting-Webapp/assets/109853249/a4e865fc-653b-4cf8-af7a-ff9c23d8aa60">
+<img width="1440" alt="Space Shooter" src="https://github.com/amRon15/Space-Shooting-Webapp/assets/109853249/2b77dfa3-52da-4f29-8ade-b1f7dc2c929f">
+
   
 ## Contributing:
 
