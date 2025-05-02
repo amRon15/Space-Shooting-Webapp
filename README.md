@@ -2,7 +2,7 @@
 
 ## About the project:
 
-This is a space shooting game where you control a spaceship and shoot down meteor.
+This is a space shooting game where you control a spaceship and shoot down meteor. With a responsive web design, playing on mobile devices are also avaliable.
 
 ## Features:
 
@@ -22,7 +22,6 @@ This is a space shooting game where you control a spaceship and shoot down meteo
 - Pause button
   
 ## Future Updates:
-
 - Mobile version controls ( joystick-like )
 - background music and sound effects (with mute functionality)
 - Optimization
@@ -30,15 +29,7 @@ This is a space shooting game where you control a spaceship and shoot down meteo
 ## ScreenShot
 <img width="1440" alt="Space Shooter" src="https://github.com/amRon15/Space-Shooting-Webapp/assets/109853249/2b77dfa3-52da-4f29-8ade-b1f7dc2c929f">
 
-  
-## Contributing:
-
-We welcome contributions and suggestions to improve the game. Please feel free to submit issues, feature requests, or code changes.
-
-## Current Version: v1.2
-
 ## License:
-
 This game is licensed under the MIT License.
 
 # Author:
