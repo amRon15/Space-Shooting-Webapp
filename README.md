@@ -20,11 +20,6 @@ This is a space shooting game where you control a spaceship and shoot down meteo
 - Shoot button ( Circle button )
 - Restart button
 - Pause button
-  
-## Future Updates:
-- Mobile version controls ( joystick-like )
-- background music and sound effects (with mute functionality)
-- Optimization
 
 ## ScreenShot
 <img width="1440" alt="Space Shooter" src="https://github.com/amRon15/Space-Shooting-Webapp/assets/109853249/2b77dfa3-52da-4f29-8ade-b1f7dc2c929f">
